@@ -87,8 +87,26 @@ public class TwitchIRC : MonoBehaviour
 
         if (twitchDetails.oauth.Length <= 0 || twitchDetails.nick.Length <= 0 || twitchDetails.channel.Length <= 0)
         {
-            ConnectionStateAlert(StatusType.Error, "Missing required details! Check your Twitch details.");
-            yield break;
+            // Try reading from file
+            bool success = true;
+            var twitchConfig = Resources.Load<TextAsset>("Config");
+            try
+            {
+                var lines = twitchConfig.text.Split('\n');
+                twitchDetails.oauth = lines[0];
+                twitchDetails.nick = lines[1];
+                twitchDetails.channel = lines[1];
+            }
+            catch
+            {
+                success = false;
+            }
+
+            if(success == false)
+            {
+                ConnectionStateAlert(StatusType.Error, "Missing required details! Check your Twitch details.");
+                yield break;
+            }
         }
 
         // Fix formatting (twitchapps.com)
