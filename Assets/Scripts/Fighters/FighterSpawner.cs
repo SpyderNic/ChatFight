@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace ChatFight
@@ -25,6 +25,15 @@ namespace ChatFight
 
             // Initialise fighters list
             activeFighters = new List<string>(maxFighters);
+
+            // Debug message
+            for(int index = 1; index <= 4; ++index)
+            {
+                NewMessage(new Chatter(new IRCPrivmsg($"bot{index}", "spydernic", "hi"), new IRCTags()
+                {
+                    displayName = $"Bot{index}"
+                }));
+            }
         }
 
         // This gets called whenever a new chat message appears
