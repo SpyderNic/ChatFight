@@ -8,7 +8,7 @@ namespace ChatFight
 {
     public class FighterController : MonoBehaviour
     {
-        public event Action<string> OnKilled;
+        public event Action<string, string> OnKilled; // fighterKilled, killedBy
 
         public const int MaxHealth = 100;
 
@@ -19,7 +19,7 @@ namespace ChatFight
         [SerializeField] private ProgressBar healthBar = null;
 
         private int currentHealth = MaxHealth;
-        private string fighterID = string.Empty;
+        private string lastDamagedByFighterID = string.Empty;
         private Vector3 originalOffset = Vector3.zero;
 
         public void Start()
@@ -33,7 +33,7 @@ namespace ChatFight
 
         public void Initialize(Chatter chatter)
         {
-            fighterID = chatter.login;
+            gameObject.name = chatter.login;
 
             // If chatter's display name is "font safe" then use it. Otherwise use login name.
             // Login name is always lowercase and can only contain characters: a-z, A-Z, 0-9, _
@@ -61,18 +61,21 @@ namespace ChatFight
 
         public void ApplyDamage(int damage)
         {
-            currentHealth -= damage;
-            if (currentHealth <= 0)
+            if(currentHealth > 0)
             {
-                currentHealth = 0;
-                UpdateHealthBar(() =>
+                currentHealth -= damage;
+                if (currentHealth <= 0)
                 {
-                    KillFighter();
-                });
-            }
-            else
-            {
-                UpdateHealthBar();
+                    currentHealth = 0;
+                    UpdateHealthBar(() =>
+                    {
+                        KillFighter();
+                    });
+                }
+                else
+                {
+                    UpdateHealthBar();
+                }
             }
         }
 
@@ -114,13 +117,14 @@ namespace ChatFight
         {
             if(collision.collider.tag == "Fighter")
             {
+                lastDamagedByFighterID = collision.collider.name;
                 ApplyDamage(10);
             }
         }
 
         private void KillFighter()
         {
-            OnKilled?.Invoke(fighterID);
+            OnKilled?.Invoke(gameObject.name, lastDamagedByFighterID);
             Destroy(gameObject);
         }
     }

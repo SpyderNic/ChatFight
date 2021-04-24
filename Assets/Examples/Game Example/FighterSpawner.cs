@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace ChatFight
@@ -52,11 +52,11 @@ namespace ChatFight
             activeFighters.Add(chatter.login);
         }
 
-        private void OnFighterKilled(string fighterID)
+        private void OnFighterKilled(string fighterKilled, string killedBy)
         {
-            if(activeFighters.Contains(fighterID))
+            if (activeFighters.Contains(fighterKilled))
             {
-                activeFighters.Remove(fighterID);
+                activeFighters.Remove(fighterKilled);
             }
         }
     }
