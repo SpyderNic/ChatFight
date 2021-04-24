@@ -1,35 +1,38 @@
 ﻿using UnityEngine;
 
-public class FighterSpawner : MonoBehaviour
+namespace ChatFight
 {
-    public GameObject fighterPrefab;
-
-    private TwitchIRC IRC;
-    private int spawnCount = 0;
-
-    private void Start()
+    public class FighterSpawner : MonoBehaviour
     {
-        // Place TwitchIRC.cs script on an gameObject called "TwitchIRC"
-        IRC = GameObject.Find("TwitchIRC").GetComponent<TwitchIRC>();
+        public GameObject fighterPrefab;
 
-        // Add an event listener
-        IRC.newChatMessageEvent.AddListener(NewMessage);
-    }
+        private TwitchIRC IRC;
+        private int spawnCount = 0;
 
-    // This gets called whenever a new chat message appears
-    public void NewMessage(Chatter chatter)
-    {
-        if (spawnCount >= 100) 
+        private void Start()
         {
-            Debug.Log("MAX COUNT REACHED!");
-            return;
+            // Place TwitchIRC.cs script on an gameObject called "TwitchIRC"
+            IRC = GameObject.Find("TwitchIRC").GetComponent<TwitchIRC>();
+
+            // Add an event listener
+            IRC.newChatMessageEvent.AddListener(NewMessage);
         }
 
-        Debug.Log("New chatter object received! Chatter name: " + chatter.tags.displayName);
+        // This gets called whenever a new chat message appears
+        public void NewMessage(Chatter chatter)
+        {
+            if (spawnCount >= 100)
+            {
+                Debug.Log("MAX COUNT REACHED!");
+                return;
+            }
 
-        GameObject o = Instantiate(fighterPrefab, Random.insideUnitCircle * 3, Quaternion.identity);
-        o.GetComponent<FighterController>().Initialize(chatter);
+            Debug.Log("New chatter object received! Chatter name: " + chatter.tags.displayName);
 
-        spawnCount++;
+            GameObject o = Instantiate(fighterPrefab, Random.insideUnitCircle * 3, Quaternion.identity);
+            o.GetComponent<FighterController>().Initialize(chatter);
+
+            ++spawnCount;
+        }
     }
 }

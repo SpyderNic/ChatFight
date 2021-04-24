@@ -28,9 +28,6 @@ namespace ChatFight
         [SerializeField] private FillStyle fillStyle = FillStyle.Horizontal;
         [SerializeField] private RectTransform fillRect = null;
         [SerializeField] private Image fillImage = null;
-        [SerializeField] private bool overrideColour = true;
-        [SerializeField] private Color fillerColour = Color.white;
-        [SerializeField] private Color completeColour = Color.white;
         [SerializeField] private TMP_Text text = null;
         [SerializeField] [Range(0.0f, 1.0f)] private float progress = 0.0f;
         [SerializeField] private bool update = false;
@@ -43,10 +40,6 @@ namespace ChatFight
 
         private void Awake()
         {
-            if (completeColour == Color.white)
-            {
-                completeColour = fillerColour;
-            }
             SetProgress(progress);
         }
 
@@ -110,19 +103,8 @@ namespace ChatFight
         public void SetProgress(float progress)
         {
             progress = Mathf.Clamp01(progress);
+            Debug.LogError($"SetProgress: {progress}");
             UpdateFillProgress();
-
-            if (overrideColour == true)
-            {
-                if (progress >= 1.0f)
-                {
-                    SetFillColor(completeColour);
-                }
-                else
-                {
-                    SetFillColor(fillerColour);
-                }
-            }
         }
 
         public float GetProgress()
