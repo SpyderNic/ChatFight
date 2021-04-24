@@ -19,9 +19,11 @@ namespace ChatFight
 
         public void Start()
         {
+            // Get the prefab's offset
+            originalOffset = canvasTransform.position - transform.position;
+
             // Start on full heath
             ApplyHeal(MaxHealth);
-            originalOffset = canvasTransform.position - transform.position;
         }
 
         public void Initialize(Chatter chatter)
@@ -96,9 +98,12 @@ namespace ChatFight
             }
         }
 
-        private void OnCollisionEnter(Collision collision)
+        private void OnCollisionEnter2D(Collision2D collision)
         {
-            ApplyDamage(10);
+            if(collision.collider.tag == "Fighter")
+            {
+                ApplyDamage(10);
+            }
         }
     }
 }

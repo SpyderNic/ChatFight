@@ -103,7 +103,6 @@ namespace ChatFight
         public void SetProgress(float progress)
         {
             progress = Mathf.Clamp01(progress);
-            Debug.LogError($"SetProgress: {progress}");
             UpdateFillProgress();
         }
 
