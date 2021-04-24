@@ -1,9 +1,10 @@
 ﻿using UnityEngine;
 
-public class BoxSpawner : MonoBehaviour
+public class FighterSpawner : MonoBehaviour
 {
+    public GameObject fighterPrefab;
+
     private TwitchIRC IRC;
-    public GameObject boxPrefab;
     private int spawnCount = 0;
 
     private void Start()
@@ -26,8 +27,8 @@ public class BoxSpawner : MonoBehaviour
 
         Debug.Log("New chatter object received! Chatter name: " + chatter.tags.displayName);
 
-        GameObject o = Instantiate(boxPrefab, Random.insideUnitCircle * 3, Quaternion.identity);
-        o.GetComponent<BoxController>().Initialize(chatter);
+        GameObject o = Instantiate(fighterPrefab, Random.insideUnitCircle * 3, Quaternion.identity);
+        o.GetComponent<FighterController>().Initialize(chatter);
 
         spawnCount++;
     }

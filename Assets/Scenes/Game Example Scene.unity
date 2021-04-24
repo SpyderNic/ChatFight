@@ -377,7 +377,7 @@ GameObject:
   - component: {fileID: 228564996}
   - component: {fileID: 228564997}
   m_Layer: 0
-  m_Name: BoxSpawner
+  m_Name: FighterSpawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -409,7 +409,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1ad208cf3f8cfc4596fb9064a34e6fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boxPrefab: {fileID: 672828859674011984, guid: 693c1fcb4b49967418c2178d63b1c2c4,
+  fighterPrefab: {fileID: 672828859674011984, guid: 693c1fcb4b49967418c2178d63b1c2c4,
     type: 3}
 --- !u!1 &503323014
 GameObject:

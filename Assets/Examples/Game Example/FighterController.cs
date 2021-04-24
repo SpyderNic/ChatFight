@@ -1,10 +1,11 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
+using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
-public class BoxController : MonoBehaviour
+public class FighterController : MonoBehaviour
 {
-    public Text nameText; 
+    public TMP_Text fighterName; 
     public SpriteRenderer spriteRenderer;
     public Transform canvasTransform;
 
@@ -15,7 +16,10 @@ public class BoxController : MonoBehaviour
         // If chatter's display name is "font safe" then use it. Otherwise use login name.
         // Login name is always lowercase and can only contain characters: a-z, A-Z, 0-9, _
         //
-        nameText.text = chatter.IsDisplayNameFontSafe() ? chatter.tags.displayName : chatter.login;
+        fighterName.text = chatter.IsDisplayNameFontSafe() ? chatter.tags.displayName : chatter.login;
+        Color colour = Color.white;
+        ColorUtility.TryParseHtmlString(chatter.tags.colorHex, out colour);
+        fighterName.color = colour;
 
         // Change box color
         //
@@ -45,9 +49,9 @@ public class BoxController : MonoBehaviour
     {
         while (true)
         {
-            yield return new WaitForSeconds(Random.Range(2f, 4f));
+            yield return new WaitForSeconds(UnityEngine.Random.Range(2f, 4f));
 
-            float dir = Random.value > .5f ? 1f : -1f; // Random jump direction
+            float dir = UnityEngine.Random.value > .5f ? 1f : -1f; // Random jump direction
             GetComponent<Rigidbody2D>().AddForce(Vector2.up * 10f + (Vector2.right * 3f) * dir, ForceMode2D.Impulse);
         }
     }
