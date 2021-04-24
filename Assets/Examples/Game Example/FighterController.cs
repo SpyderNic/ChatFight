@@ -1,13 +1,13 @@
-﻿using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
 
 public class FighterController : MonoBehaviour
 {
-    public TMP_Text fighterName; 
-    public SpriteRenderer spriteRenderer;
-    public Transform canvasTransform;
+    public TMP_Text fighterName = null;
+    public SpriteRenderer spriteRenderer = null;
+    public Transform canvasTransform = null;
+    public Rigidbody2D rigidBody = null;
 
     public void Initialize(Chatter chatter)
     {
@@ -17,9 +17,7 @@ public class FighterController : MonoBehaviour
         // Login name is always lowercase and can only contain characters: a-z, A-Z, 0-9, _
         //
         fighterName.text = chatter.IsDisplayNameFontSafe() ? chatter.tags.displayName : chatter.login;
-        Color colour = Color.white;
-        ColorUtility.TryParseHtmlString(chatter.tags.colorHex, out colour);
-        fighterName.color = colour;
+        fighterName.color = ColorUtility.TryParseHtmlString(chatter.tags.colorHex, out var colour) ? colour : Color.white;
 
         // Change box color
         //
@@ -42,17 +40,17 @@ public class FighterController : MonoBehaviour
     private void LateUpdate()
     {
         // Update name canvas position each frame
-        canvasTransform.position = (Vector2)transform.position + new Vector2(0, 0.8f);
+        canvasTransform.position = transform.position + Vector3.up * 0.8f;
     }
 
     private IEnumerator Jump()
     {
         while (true)
         {
-            yield return new WaitForSeconds(UnityEngine.Random.Range(2f, 4f));
+            yield return new WaitForSeconds(Random.Range(2.0f, 4.0f));
 
-            float dir = UnityEngine.Random.value > .5f ? 1f : -1f; // Random jump direction
-            GetComponent<Rigidbody2D>().AddForce(Vector2.up * 10f + (Vector2.right * 3f) * dir, ForceMode2D.Impulse);
+            float dir = Random.value > 0.5f ? 1.0f : -1.0f; // Random jump direction
+            rigidBody.AddForce(Vector2.up * 10.0f + (Vector2.right * 3.0f) * dir, ForceMode2D.Impulse);
         }
     }
 }

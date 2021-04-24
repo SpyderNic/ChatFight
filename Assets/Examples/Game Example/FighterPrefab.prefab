@@ -113,7 +113,7 @@ GameObject:
   - component: {fileID: 672828859674011987}
   - component: {fileID: 672828859674011988}
   m_Layer: 0
-  m_Name: BoxPrefab
+  m_Name: FighterPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -149,6 +149,7 @@ MonoBehaviour:
   fighterName: {fileID: 223690165558613819}
   spriteRenderer: {fileID: 672828859674011985}
   canvasTransform: {fileID: 672828858701113843}
+  rigidBody: {fileID: 672828859674011987}
 --- !u!212 &672828859674011985
 SpriteRenderer:
   m_ObjectHideFlags: 0
