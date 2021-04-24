@@ -428,6 +428,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fighterPrefab: {fileID: 672828859674011984, guid: 693c1fcb4b49967418c2178d63b1c2c4,
     type: 3}
+  IRC: {fileID: 665103898}
+  maxFighters: 10
 --- !u!1 &503323014
 GameObject:
   m_ObjectHideFlags: 0

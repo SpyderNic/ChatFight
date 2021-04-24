@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using DG.Tweening;
+using System;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 
@@ -6,6 +8,8 @@ namespace ChatFight
 {
     public class FighterController : MonoBehaviour
     {
+        public event Action<string> OnKilled;
+
         public const int MaxHealth = 100;
 
         [SerializeField] private SpriteRenderer spriteRenderer = null;
@@ -15,6 +19,7 @@ namespace ChatFight
         [SerializeField] private ProgressBar healthBar = null;
 
         private int currentHealth = MaxHealth;
+        private string fighterID = string.Empty;
         private Vector3 originalOffset = Vector3.zero;
 
         public void Start()
@@ -28,8 +33,8 @@ namespace ChatFight
 
         public void Initialize(Chatter chatter)
         {
-            // Set chatter's name
-            //
+            fighterID = chatter.login;
+
             // If chatter's display name is "font safe" then use it. Otherwise use login name.
             // Login name is always lowercase and can only contain characters: a-z, A-Z, 0-9, _
             //
@@ -60,8 +65,15 @@ namespace ChatFight
             if (currentHealth <= 0)
             {
                 currentHealth = 0;
+                UpdateHealthBar(() =>
+                {
+                    KillFighter();
+                });
             }
-            UpdateHealthBar();
+            else
+            {
+                UpdateHealthBar();
+            }
         }
 
         public void ApplyHeal(int heal)
@@ -74,10 +86,10 @@ namespace ChatFight
             UpdateHealthBar();
         }
 
-        private void UpdateHealthBar()
+        private void UpdateHealthBar(TweenCallback callback = null)
         {
-            healthBar.TweenToProgress((float)currentHealth / MaxHealth, 0.5f);
             healthBar.Text.SetText($"{currentHealth} / {MaxHealth}");
+            healthBar.TweenToProgress((float)currentHealth / MaxHealth, 0.5f, 0.0f, callback);
         }
 
         private void LateUpdate()
@@ -91,9 +103,9 @@ namespace ChatFight
         {
             while (true)
             {
-                yield return new WaitForSeconds(Random.Range(2.0f, 4.0f));
+                yield return new WaitForSeconds(UnityEngine.Random.Range(2.0f, 4.0f));
 
-                float dir = Random.value > 0.5f ? 1.0f : -1.0f; // Random jump direction
+                float dir = UnityEngine.Random.value > 0.5f ? 1.0f : -1.0f; // Random jump direction
                 rigidBody.AddForce(Vector2.up * 10.0f + (Vector2.right * 3.0f) * dir, ForceMode2D.Impulse);
             }
         }
@@ -104,6 +116,12 @@ namespace ChatFight
             {
                 ApplyDamage(10);
             }
+        }
+
+        private void KillFighter()
+        {
+            OnKilled?.Invoke(fighterID);
+            Destroy(gameObject);
         }
     }
 }

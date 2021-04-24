@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace ChatFight
 {
@@ -6,33 +7,57 @@ namespace ChatFight
     {
         public GameObject fighterPrefab;
 
-        private TwitchIRC IRC;
-        private int spawnCount = 0;
+        [SerializeField] private TwitchIRC IRC = null;
+        [SerializeField] private int maxFighters = 10;
+
+        private List<string> activeFighters = new List<string>();
 
         private void Start()
         {
-            // Place TwitchIRC.cs script on an gameObject called "TwitchIRC"
-            IRC = GameObject.Find("TwitchIRC").GetComponent<TwitchIRC>();
+            if(IRC == null)
+            {
+                // Place TwitchIRC.cs script on an gameObject called "TwitchIRC"
+                IRC = GameObject.Find("TwitchIRC").GetComponent<TwitchIRC>();
+            }
 
             // Add an event listener
             IRC.newChatMessageEvent.AddListener(NewMessage);
+
+            // Initialise fighters list
+            activeFighters = new List<string>(maxFighters);
         }
 
         // This gets called whenever a new chat message appears
         public void NewMessage(Chatter chatter)
         {
-            if (spawnCount >= 100)
+            if (activeFighters.Count >= maxFighters)
             {
                 Debug.Log("MAX COUNT REACHED!");
                 return;
             }
 
+            if(activeFighters.Contains(chatter.login))
+            {
+                Debug.Log($"{chatter.login} already fighting!");
+                return;
+            }
+
             Debug.Log("New chatter object received! Chatter name: " + chatter.tags.displayName);
 
-            GameObject o = Instantiate(fighterPrefab, Random.insideUnitCircle * 3, Quaternion.identity);
-            o.GetComponent<FighterController>().Initialize(chatter);
+            // Create the new fighter
+            var newFighter = Instantiate(fighterPrefab, Random.insideUnitCircle * 3, Quaternion.identity);
+            var fighterController = newFighter.GetComponent<FighterController>();
+            fighterController.Initialize(chatter);
+            fighterController.OnKilled += OnFighterKilled;
+            activeFighters.Add(chatter.login);
+        }
 
-            ++spawnCount;
+        private void OnFighterKilled(string fighterID)
+        {
+            if(activeFighters.Contains(fighterID))
+            {
+                activeFighters.Remove(fighterID);
+            }
         }
     }
 }
