@@ -29,7 +29,7 @@ namespace ChatFight
         [SerializeField] private RectTransform fillRect = null;
         [SerializeField] private Image fillImage = null;
         [SerializeField] private TMP_Text text = null;
-        [SerializeField] [Range(0.0f, 1.0f)] private float progress = 0.0f;
+        [SerializeField] [Range(0.0f, 1.0f)] private float currentProgress = 0.0f;
         [SerializeField] private bool update = false;
 
         private Tweener tween = null;
@@ -40,7 +40,7 @@ namespace ChatFight
 
         private void Awake()
         {
-            SetProgress(progress);
+            SetProgress(currentProgress);
         }
 
         private void OnDestroy()
@@ -54,15 +54,15 @@ namespace ChatFight
             if (update == true)
             {
                 update = false;
-                SetProgress(progress);
+                SetProgress(currentProgress);
             }
         }
 
         private void OnGUI()
         {
-            if (lastProgress != progress && Application.isPlaying == false)
+            if (lastProgress != currentProgress && Application.isPlaying == false)
             {
-                lastProgress = progress;
+                lastProgress = currentProgress;
                 update = true;
             }
         }
@@ -91,7 +91,7 @@ namespace ChatFight
 
         public void TweenToProgress(float endProgress, float duration, float delay = 0.0f, TweenCallback callback = null)
         {
-            TweenToProgress(progress, endProgress, duration, delay, callback);
+            TweenToProgress(currentProgress, endProgress, duration, delay, callback);
         }
 
         public void TweenToProgress(float startProgress, float endProgress, float duration, float delay = 0.0f, TweenCallback callback = null)
@@ -102,13 +102,13 @@ namespace ChatFight
 
         public void SetProgress(float progress)
         {
-            progress = Mathf.Clamp01(progress);
+            currentProgress = Mathf.Clamp01(progress);
             UpdateFillProgress();
         }
 
         public float GetProgress()
         {
-            return progress;
+            return currentProgress;
         }
 
         private void UpdateFillProgress()
@@ -135,12 +135,12 @@ namespace ChatFight
             {
                 case FillStyle.Horizontal:
                 {
-                    newAnchor.x = progress;
+                    newAnchor.x = currentProgress;
                     break;
                 }
                 case FillStyle.Vertical:
                 {
-                    newAnchor.y = progress;
+                    newAnchor.y = currentProgress;
                     break;
                 }
             }
@@ -149,7 +149,7 @@ namespace ChatFight
 
         private void UpdateFillImage()
         {
-            fillImage.fillAmount = progress;
+            fillImage.fillAmount = currentProgress;
         }
     }
 }
