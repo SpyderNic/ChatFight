@@ -115,7 +115,7 @@ namespace ChatFight
 
         private void OnCollisionEnter2D(Collision2D collision)
         {
-            if(collision.collider.tag == "Fighter")
+            if(collision.collider.tag == Identifiers.tagFighter)
             {
                 lastDamagedByFighterID = collision.collider.name;
                 ApplyDamage(10);
