@@ -1,6 +1,7 @@
 ﻿using DG.Tweening;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -17,6 +18,8 @@ namespace ChatFight
         [SerializeField] private Transform canvasTransform = null;
         [SerializeField] private TMP_Text fighterName = null;
         [SerializeField] private ProgressBar healthBar = null;
+        [SerializeField] private WeaponController weaponController = null;
+        [SerializeField] private List<WeaponData> weapons = new List<WeaponData>();
 
         private int currentHealth = MaxHealth;
         private string lastDamagedByFighterID = string.Empty;
@@ -29,6 +32,14 @@ namespace ChatFight
 
             // Start on full heath
             ApplyHeal(MaxHealth);
+
+            // Choose and initialize weapon
+            var chosenWeapon = weapons.GetRandom();
+            foreach(var weapon in weapons)
+            {
+                weapon.gameObject.SetActive(weapon == chosenWeapon);
+            }
+            weaponController.Initialize(chosenWeapon);
         }
 
         public void Initialize(Chatter chatter)
@@ -51,9 +62,6 @@ namespace ChatFight
             else
             if (chatter.HasBadge("subscriber"))
                 spriteRenderer.color = Color.red; // Red box if chatter has subscriber badge
-
-            // Detach name canvas from parent so that it doesn't rotate
-            //canvasTransform.SetParent(null);
 
             // Start jumping
             StartCoroutine(Jump());
@@ -118,7 +126,6 @@ namespace ChatFight
             if(collision.collider.tag == Identifiers.tagFighter)
             {
                 lastDamagedByFighterID = collision.collider.name;
-                ApplyDamage(10);
             }
         }
 
