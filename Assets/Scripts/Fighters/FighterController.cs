@@ -18,8 +18,7 @@ namespace ChatFight
         [SerializeField] private Transform canvasTransform = null;
         [SerializeField] private TMP_Text fighterName = null;
         [SerializeField] private ProgressBar healthBar = null;
-        [SerializeField] private WeaponController weaponController = null;
-        [SerializeField] private List<WeaponData> weapons = new List<WeaponData>();
+        [SerializeField] private List<WeaponController> weapons = new List<WeaponController>();
 
         private int currentHealth = MaxHealth;
         private string lastDamagedByFighterID = string.Empty;
@@ -39,7 +38,6 @@ namespace ChatFight
             {
                 weapon.gameObject.SetActive(weapon == chosenWeapon);
             }
-            weaponController.Initialize(chosenWeapon);
         }
 
         public void Initialize(Chatter chatter)

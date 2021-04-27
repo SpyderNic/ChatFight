@@ -4,13 +4,7 @@ namespace ChatFight
 {
     public class WeaponController : MonoBehaviour
     {
-        private WeaponData weaponData = null;
-
-        public void Initialize(WeaponData data)
-        {
-            weaponData = data;
-            gameObject.name = data.id;
-        }
+        [SerializeField] private WeaponData weaponData = null;
 
         private void Attack()
         {
@@ -30,7 +24,6 @@ namespace ChatFight
 
         private void OnTriggerEnter2D(Collider2D collider)
         {
-            Debug.LogError($"Collision between {collider.name} and {name}");
             if (collider.tag == Identifiers.tagFighter)
             {
                 var fighter = collider.GetComponent<FighterController>();
