@@ -114,8 +114,9 @@ namespace ChatFight
             {
                 yield return new WaitForSeconds(UnityEngine.Random.Range(2.0f, 4.0f));
 
+                float jumpForce = UnityEngine.Random.Range(2.0f, 4.0f);
                 float dir = UnityEngine.Random.value > 0.5f ? 1.0f : -1.0f; // Random jump direction
-                rigidBody.AddForce(Vector2.up * 10.0f + (Vector2.right * 3.0f) * dir, ForceMode2D.Impulse);
+                rigidBody.AddForce(Vector2.up * 10.0f + (Vector2.right * jumpForce) * dir, ForceMode2D.Impulse);
             }
         }
 
